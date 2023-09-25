@@ -1,0 +1,51 @@
+version: "3.3"
+
+services:
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init_setup.sql:/docker-entrypoint-initdb.d/init_setup.sql
+    environment:
+      POSTGRES_PASSWORD: adminadmin
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    ports:
+      - 6379:6379
+
+  mqtt:
+    image: eclipse-mosquitto:latest
+    user: "1000:1000"
+    volumes:
+      - ./docker/mosquitto/config:/mosquitto/config
+      - ./docker/mosquitto/log:/mosquitto/log
+      - ./docker/mosquitto/data:/mosquitto/data
+    ports:
+      - 1883:1883
+      - 9001:9001
+
+  web:
+    restart: unless-stopped
+    build: ./webapp/weather_station
+    command: python manage.py runserver 0.0.0.0:8000
+    expose:
+      - "8000"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./webapp/weather_station/:/usr/scr/webapp/
+    ports:
+      - 8000:8000
+
+volumes:
+  pgdata:
+  redisdata:

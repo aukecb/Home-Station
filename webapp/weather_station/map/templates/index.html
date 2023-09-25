@@ -1,0 +1,67 @@
+{% load django_bootstrap5 %}
+{% load leaflet_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% leaflet_js %}
+    {% leaflet_css %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+  <div class="container">
+    <div class="card" style="">
+      <h4 class="card-header">Weather station</h4>
+      {% leaflet_map "map" callback="init_map" %}
+    </div>
+
+    <div class="card" style="">
+      <h4 class="card-header">Weather info</h4>
+      <h4 id="info" class="card-body"></h4>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">lat</th>
+          <th scope="col">long</th>
+          <th scope="col">url</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for item in stations %}
+      <td scope="row">{{item.id}}</td>
+      <td scope="row">{{item.latitude}}</td>
+      <td scope="row">{{item.longitude}}</td>
+      <td scope="row">{{item.base_url}}</td>
+      {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</body>
+</html>
+<script>
+  function init_map(map, options){
+    map.setView([51.5, 4.22], 5);
+    var markerconfig = {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.5,
+      radius: 500
+    }
+    var marker = L.marker([51.55, 4.22],markerconfig).addTo(map);
+    {% for item in stations %}
+      L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
+    {% endfor %}
+
+  }
+
+  function open_station(){
+    document.getElementById("info").innerHTML = "test";
+
+
+  }
+</script>

@@ -1,0 +1,269 @@
+body {
+    background: #333;
+    
+}
+
+
+.topbar {
+    display: flex;
+    padding-top: 0%;
+    /* justify-content: center;
+    align-items: center; */
+    /*transform-origin: 30% 50%;*/
+    /* animation: move_top 1s linear 1.5s forwards; */
+}
+
+
+.clock {
+    width: 50px;
+    height: 50px;
+    border: 3px solid white;
+    border-radius: 50%;
+    margin-right: 25px;
+    /* animation:  */
+        /* spin 1s 1.5s linear 5; */
+    /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+}
+
+.clock_inside {
+    width: 3px;
+    height: 20px;
+    background: white;
+    margin: 5px auto;
+    /* animation: spin2 1s 0.2s linear 10; */
+}
+
+.clock_inside_small {
+    width: 3px;
+    height: 15px;
+    background: red;
+    margin: -20px auto;
+    /* animation: spin2 0.8s 0.3s linear 10; */
+}
+
+.typewriter {
+    /* animation: grow 1s 1.5s linear forwards; */
+}
+
+@keyframes grow {
+    from{
+        flex-grow: 0;
+    }
+    to{
+        flex-grow: 1;
+    }
+    
+}
+
+.typewriter h1 {
+    color: #fff;
+    font-family: monospace;
+    overflow: hidden;
+    border-right: .15em solid ;
+    white-space: nowrap;
+    align-items: left;
+    letter-spacing: .15em;
+    flex-grow: auto;
+    animation:
+        typing 1.5s steps(30, end),
+        blink-caret .75s step-end 2 forwards;
+
+}
+
+.block {
+    align-items: center;
+    justify-content: center;
+    border: 3px solid grey;
+    border-radius: 20px;
+    margin: 5px;
+    box-shadow: 0 0 5px #fff;
+    flex-wrap: wrap;
+    /* flex: 1 1 33%; */
+    
+}
+
+body > main > .block{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    /* opacity: 0%;  */
+    /* animation: fade_in 2s 3s linear 1 forwards ; */
+    
+}
+
+
+
+.block > .block{
+    border-radius: 20px;
+    display: flex;
+    align-items: flex-start;
+    margin: 10px;
+    padding: 5px;
+    flex: 1 auto;
+    /*width: 100%;*/
+}
+
+.colblock {
+    display: flex;
+    /* flex-direction: row; */
+    flex: 1;
+}
+
+.colblock > .block {
+    flex: 1;
+}
+
+h2 {
+    text-align: left;
+    color: white;
+    margin: 10px;
+    font-family: monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3s 2.9s steps(40, end);
+
+}
+
+
+.block table{
+    border-collapse: collapse;
+    margin: 25px auto;
+    font-size: 1.1em;
+    font-family: monospace;
+    min-width: 400px;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    color: #fff;
+    border: 1px solid #5c5c5c;
+}
+
+.block thead tr{
+    border-bottom: 1px solid #5c5c5c;
+    background-color: #1a1a1a;
+    color: #20c997;
+    text-align: left;
+    font-size: 1.1em;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.block th, td {
+    padding: 12px 0;
+    padding-left: 5px;
+    border-right: 1px solid #5c5c5c ;
+}
+
+.block tbody tr{
+    border-bottom: 3px solid #5c5c5c;
+    border-collapse: collapse;
+    background-color: #1a1a1a;
+}
+
+.block tbody tr:nth-of-type(even){
+    background-color: #1a1a1a;
+}
+
+#logout {
+    /* opacity: 0%; */
+    background-color: red;
+    border-radius: 10px;
+}
+
+
+#nestkleur {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    background-color: black;
+}
+
+#gauges {
+    display: flex;
+    flex-basis: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+#gauges > div {
+    display: block;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+#gauge_header {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    flex: 0 0 100%;
+    padding-left: 53px;
+}
+#gauge_header > div{
+    /* flex: 0 0 33%; */
+    align-items: center;
+    text-align: center;
+}
+
+
+
+@keyframes fade_in {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+    
+}
+
+@keyframes spin2 {
+    from {
+        transform: rotate(0deg);
+        transform-origin: 50% 100%;
+    }
+    to{
+        transform: rotate(360deg) ;
+        transform-origin: 50% 100%;
+    }
+    
+}
+
+@keyframes move_top {
+    from{
+        padding-top: 25%;
+    }
+    to{
+        transform: translateY(0%);
+        padding-top: 0;
+    }
+}
+
+@keyframes move {
+    from {
+        margin-right: 25px;
+    }
+    to {
+        margin-right:10%;
+    }
+    
+}
+
+@keyframes spin {
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes typing {
+    from {width: 100%}
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent}
+    50% { border-color: white;}
+}
