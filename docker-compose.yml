@@ -41,6 +41,7 @@ services:
     depends_on:
       - db
       - redis
+      - mqtt
     volumes:
       - ./webapp/weather_station/:/usr/scr/webapp/
     ports:

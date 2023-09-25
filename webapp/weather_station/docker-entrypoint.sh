@@ -15,4 +15,12 @@ while ! python manage.py migrate 2>&1; do
 done
 
 echo "Django is configured!"
-exec "$@"
+
+COMMAND="$@"
+
+mqttasgi -H mqtt -p 1883 weather_station.asgi:application &
+
+echo "$COMMAND"
+
+eval "$COMMAND"
+
