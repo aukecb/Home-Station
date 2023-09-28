@@ -4,7 +4,8 @@ from django.contrib.auth.models import User, Group
 import django_filters.rest_framework
 
 from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework import filters, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -17,17 +18,12 @@ import datetime as dt
 # Create your views here.
 
 def index(request):
-    # return HttpResponse(" test 12234")
     start_date = dt.datetime.now() - dt.timedelta(minutes=15)
     end_date = dt.datetime.now()
     today = [dt.datetime.today().time().min, dt.datetime.today().time().max]
-    # print(start_date)
     context = {
         "data":Weather.objects.all()
     }
-    # print("TTTTTTEST", context['data'][0].id)
-    # print("TTTTTTEST", list(context['data'])[-1].id)
-    # print("TTTESTT", len(context['data']))
     return render(request, "dashboard/index2.html", context=context)
 
 def getdata(request):
@@ -41,14 +37,15 @@ def getdata(request):
     return render(request, "dashboard/index2.html", {"form": form})
 
 class UserViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
 
 class GroupViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 class WeatherViewSet(viewsets.ModelViewSet):
     queryset = Weather.objects.all()

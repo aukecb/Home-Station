@@ -30,6 +30,7 @@ services:
       - ./docker/mosquitto/data:/mosquitto/data
     ports:
       - 1883:1883
+      - 8883:8883
       - 9001:9001
 
   web:
