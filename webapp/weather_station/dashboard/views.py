@@ -51,14 +51,8 @@ class WeatherViewSet(viewsets.ModelViewSet):
     queryset = Weather.objects.all()
     serializer_class = WeatherSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = {'id':['exact'], 'time__time':['exact','gte', 'lte', 'exact'], 'humidity':['exact']}
-    # ordering_fields = ['id', 'time']
+    filterset_fields = {'id':['exact'], 'user':['exact'], 'time__time':['exact','gte', 'lte', 'exact'], 'humidity':['exact']}
+    permission_classes = [IsAuthenticated]
 
-    @action(detail=True, methods=['get'])
-    def last(self, request, pk=None):
-        l = Weather.objects.last()
-        serializer = WeatherSerializer(data=l)
-        return Response(serializer.data)
-
-
-    # permission_classes = [permissions.IsAuthenticated]
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

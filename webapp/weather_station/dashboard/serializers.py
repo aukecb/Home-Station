@@ -13,12 +13,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 class WeatherSerializer(serializers.ModelSerializer):
-    last_weather = serializers.SerializerMethodField('get_last')
-
-    def last_weather(self, obj):
-        w = Weather.objects.last()
-        serializer = WeatherSerializer(instance=w, many=True)
-        return serializer.data
+    user = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
     class Meta:
         model = Weather
-        fields = ['id', 'time', 'temperature', 'humidity', 'wind_speed', 'light_intensity']
+        fields = ['id', 'user', 'time', 'temperature', 'humidity', 'wind_speed', 'light_intensity']

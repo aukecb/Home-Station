@@ -1,6 +1,10 @@
 from django import forms
 from django.contrib.admin.widgets import AdminSplitDateTime
 from django.forms import BaseFormSet, TextInput, formset_factory
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import Weather_Stations
+from django.forms import ModelForm
 
 from django_bootstrap5.widgets import RadioSelectButtonGroup
 
@@ -11,6 +15,31 @@ MEDIA_CHOICES = (
     ("Video", (("vhs", "VHS Tape"), ("dvd", "DVD"))),
     ("unknown", "Unknown"),
 )
+
+
+class StaffCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'email', 
+            'password1',
+            'password2'
+        )
+
+    def save(self, commit=True):
+        user = super(StaffCreationForm, self).save(commit=False)
+        user.is_staff = True
+        if commit:
+            user.save()
+        return user
+
+class StationForm(ModelForm):
+    class Meta:
+        model = Weather_Stations
+        fields = ('latitude', 'longitude', 'base_url')
+    
 
 
 class TestForm(forms.Form):

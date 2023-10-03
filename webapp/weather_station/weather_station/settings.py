@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'weather_station',
         'USER': 'django',
         'PASSWORD': 'django',
-        'HOST': 'db',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -153,3 +153,5 @@ MQTT_BROKER_HOST = "127.0.0.1"
 MQTT_BROKER_PORT = 1883
 DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
