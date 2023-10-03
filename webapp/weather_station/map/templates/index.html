@@ -8,6 +8,7 @@
     {% leaflet_css %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
 </head>
 <body>
     <header class="p-3 bg-dark text-white">
@@ -44,8 +45,14 @@
 
     <div class="card" style="">
       <h4 class="card-header">Weather info</h4>
-      <p>{{ user.id }}</p>
-      <h4 id="info" class="card-body"></h4>
+      <div id="info" class="card-body container-fluid">
+        <div class="row">
+          <div id="gauge1" class="col-sm"></div>
+          <div id="gauge2" class="col-sm"></div>
+          <div id="gauge3" class="col-sm"></div>
+          <div id="gauge4" class="col-sm"></div>
+        </div>
+      </div>
     </div>
 
     <table class="table">
@@ -70,6 +77,10 @@
     </table>
 
   </div>
+  
+
+  <script src="{% static 'pureknob.js' %}"></script>
+  <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
 <script>
@@ -82,19 +93,22 @@
       radius: 500
     }
     {% for item in stations %}
-      L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
+      marker = L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
+      marker.myID = {{item.id}};
     {% endfor %}
 
   }
 
-  function open_station(){
-    document.getElementById("info").innerHTML = "test";
-    var d;
-    data = fetch('http://145.24.222.116:8000/weather/?ordering=-id&user={{user.id}}').then(data=>{return data.json()}).then(res=>{
-      console.log(res[0]);
-      document.getElementById("info").innerHTML = JSON.stringify(res);
+  function open_station(e){
+    data = fetch('http://145.24.222.116:8000/weather/?ordering=-id&weather_station=' + e.target.myID).then(data=>{return data.json()}).then(res=>{
+      // document.getElementById("info").innerHTML = JSON.stringify(res);
+      res = res[0];
+      console.log(res);
+      k1.setValue(res.temperature);
+      k2.setValue(res.humidity);
+      k3.setValue(res.wind_speed);
+      k4.setValue(res.light_intensity);
     });
-    
 
 
   }

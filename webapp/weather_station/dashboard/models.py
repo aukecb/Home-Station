@@ -7,10 +7,13 @@ from map.models import Weather_Stations
 # Create your models here.
 class Weather(models.Model):
     id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="created_by", blank=True, null=True)
-    weather_station = models.ForeignKey(Weather_Stations, on_delete=models.SET_NULL, related_name="station", blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="created_by")
+    weather_station = models.ForeignKey(Weather_Stations, on_delete=models.PROTECT, related_name="station", null=False)
     time = models.DateTimeField(auto_now_add=True)
     temperature = models.FloatField()
     humidity = models.FloatField()
     wind_speed = models.FloatField()
     light_intensity = models.FloatField()
+
+    def __str__(self):
+        return str(self.user)+ "_" + self.weather_station.__str__() + "_" + str(self.id)

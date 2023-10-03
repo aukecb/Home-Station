@@ -22,7 +22,9 @@ def create_station(request):
     if request.method == 'POST':
         form = StationForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
             return redirect(index)
     else:
         form = StationForm()

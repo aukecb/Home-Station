@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminSplitDateTime
 from django.forms import BaseFormSet, TextInput, formset_factory
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from .models import Weather_Stations
 from django.forms import ModelForm
 
@@ -31,8 +31,10 @@ class StaffCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = super(StaffCreationForm, self).save(commit=False)
         user.is_staff = True
+        default_group = Group.objects.get(name='default')
         if commit:
             user.save()
+        user.groups.add(default_group)
         return user
 
 class StationForm(ModelForm):
