@@ -13,27 +13,6 @@ window.onload = function(){
     const g1 = document.getElementById('gauge1');
     const slim_config = {
       type: 'line',
-      data: {
-        labels: ['Sept. 19, 2023, 11:58 a.m.'],
-        datasets: [
-        {
-            label: 'Humidity',
-            data: [0]
-        },
-        {
-            label: 'temperature',
-            data: [0]
-        },
-        {
-            label: 'Wind Speed',
-            data: [0]
-        },
-        {
-            label: 'Light intensity',
-            data : [0]
-        }
-        ]
-      }
     };
 
     c2 = new Chart(ctx1, slim_config)
