@@ -11,7 +11,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Weather
-from .serializers import UserSerializer, GroupSerializer, WeatherSerializer
+from map.models import Weather_Stations
+from .serializers import UserSerializer, GroupSerializer, WeatherSerializer, StationSerializer
 from .forms import *
 import datetime as dt
 
@@ -46,6 +47,14 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+class StationViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Weather_Stations.objects.all()
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = {'id':['exact'], 'user':['exact'], 'base_url':['exact']}
+    serializer_class = StationSerializer
+
 
 class WeatherViewSet(viewsets.ModelViewSet):
     queryset = Weather.objects.all()
