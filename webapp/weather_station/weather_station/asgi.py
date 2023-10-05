@@ -12,7 +12,7 @@ import os
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from dashboard.routing import channel_routing
-from dashboard.consumers import MyMqttConsumer, PahoMqttConsumer
+from dashboard.consumers import MyMqttConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'weather_station.settings')
 

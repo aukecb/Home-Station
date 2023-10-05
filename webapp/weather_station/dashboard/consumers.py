@@ -22,7 +22,7 @@ from map.models import Weather_Stations
 channel_layer = get_channel_layer()
 
 
-class TestConsumers(WebsocketConsumer):
+class WSConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]
         self.room_group_name = "weather"
@@ -47,66 +47,6 @@ class TestConsumers(WebsocketConsumer):
     def disconnect(self, code):
         print("Disconnected from server.")
         pass
-
-
-class PahoMqttConsumer(AsyncWebsocketConsumer):
-    def __init__(self):
-        print("CONNECTING TO MQTT")
-        self.topic = "test"  # Replace with your MQTT topic
-        self.client = mqtt.Client()
-        self.client.on_connect = self.on_connect
-        self.client.on_message = self.on_message
-        # self.client.username_pw_set(username=settings.MQTT_USERNAME, password=settings.MQTT_PASSWORD)
-
-    async def connect(self):
-        print("CONNECTING TO MQTT")
-
-        # Connect to the MQTT broker
-        # self.client.connect(settings.MQTT_BROKER_HOST, settings.MQTT_BROKER_PORT, keepalive=60)
-        # self.topic = "test"  # Replace with your MQTT topic
-        # self.client.loop_start()
-        self.channel_layer = get_channel_layer()
-        await self.channel_layer.group_add("weather", "test")
-        self.client.connect(settings.MQTT_BROKER_HOST, settings.MQTT_BROKER_PORT, keepalive=60)
-        self.client.loop_start()
-        self.accept()
-
-
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.topic, self.channel_name)
-        self.client.loop_stop()
-        self.client.disconnect()
-
-    async def receive(self, text_data):
-        # This method handles WebSocket messages received from the client
-        print( "RECEIEVBD")
-        print(text_data)
-        pass
-
-    def on_connect(self, client, userdata, flags, rc):
-        print(f"Connected to MQTT broker with result code {rc}")
-        self.client.subscribe(self.topic)
-
-    def on_message(self, client, userdata, msg):
-        message = msg.payload.decode("utf-8")
-        print(f"Received message on topic {msg.topic}: {message}")
-        # Send the MQTT message to the WebSocket client
-        # await self.channel_layer.group_send(
-        #     "{}".format(self.room_group_name),
-        #     {"type": "weather_message", "message": message}
-        # )
-        self.channel_layer.group_send(
-                "{}".format("weather"), 
-                {"type": "weather_message", "message": json.dumps({'message': message})})
-        self.send(text_data=json.dumps({
-            'message': message
-        }))
-
-    def start(self):
-        self.connect()
-
-    def stop(self):
-        self.disconnect()
 
 class MyMqttConsumer(MqttConsumer):
 

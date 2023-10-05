@@ -37,20 +37,8 @@
             </div>
             <div class="block">
                 <div id="gauges">
-                    <!-- <div id="gauge1"><h2>Temperatuur</h2></div>
-                    <div id="gauge2"><h2>Luchtvochtigheid</h2></div>
-                    <div id="gauge3"><h2>Windsnelheid</h2></div>
-                    <div id="gauge4"><h2>Lichtintensiteit</h2></div> -->
-
                     <div id="gauge1"></div>
-                    <div id="gauge2"></div>
-                    <div id="gauge3"></div>
-                    <div id="gauge4"></div>
                 </div>
-            </div>
-
-            <div class="block" style="width: 100%;">
-                <canvas id="myChart"></canvas>
             </div>
 
             <div class="block" style="width: 100%;">
@@ -72,14 +60,14 @@
                         <th style="padding-right: 5px; text-align: right;">Temperature</th>
                     </thead>
                     <tbody>
-                        {% for item in time|slice:":10" %}
+                        {% for item in data|slice:"50:" %}
                         <tr>
                             <td>{{item.id}}</td>
                             <td>{{item.time}}</td>
                             <td style="padding-right: 5px !important;text-align: right;width: 10px !important;">
-                                {{item.humidity}}
+                                {{item.data.humidity}}
                             </td>
-                            <td>{{item.temperature}}</td>
+                            <td>{{item.data.temperature}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
