@@ -16,6 +16,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'weather_station.settings')
 django.setup()
 
 from .models import Weather
+from django.contrib.auth.models import User
+from map.models import Weather_Stations
 
 channel_layer = get_channel_layer()
 
@@ -122,10 +124,14 @@ class MyMqttConsumer(MqttConsumer):
             print('With payload', mqtt_message['payload'])
             print('And QOS:', mqtt_message['qos'])
             jdata = json.loads(mqtt_message['payload'])
+            u = await sync_to_async(User.objects.get)(username=jdata["user"])
+            s = await sync_to_async(Weather_Stations.objects.get)(id=jdata["weather_station"])
         except Exception as e:
-            print(e)
+            print("EXCEPTION: ", e)
         try:
-            w1 = await sync_to_async(Weather.objects.create)(wind_speed=jdata['wind_speed'],light_intensity=jdata['light_intensity'],humidity=jdata['humidity'],temperature=jdata['temperature'])
+            print(jdata)
+            
+            w1 = await sync_to_async(Weather.objects.create)(user=u, weather_station=s, data=jdata["data"])
             await self.channel_layer.group_send(
                 "{}".format(self.room_group_name),
                 {"type": "weather_message", "message": jdata}

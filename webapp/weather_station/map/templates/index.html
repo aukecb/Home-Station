@@ -21,7 +21,6 @@
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="/map/" class="nav-link px-2 text-secondary">Home</a></li>
-          <li><a href="/map/setup-station" class="nav-link px-2 text-white">Features</a></li>
           <li><a href="/map/setup-station" class="nav-link px-2 text-white">Create Weatherstation</a></li>
         </ul>
 
@@ -46,11 +45,11 @@
     <div class="card" style="">
       <h4 class="card-header">Weather info</h4>
       <div id="info" class="card-body container-fluid">
-        <div class="row">
-          <div id="gauge1" class="col-sm"></div>
+        <div id="gauge1" class="row">
+          <!-- <div id="gauge1" class="col-sm"></div>
           <div id="gauge2" class="col-sm"></div>
           <div id="gauge3" class="col-sm"></div>
-          <div id="gauge4" class="col-sm"></div>
+          <div id="gauge4" class="col-sm"></div> -->
         </div>
       </div>
     </div>
@@ -96,20 +95,6 @@
       marker = L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
       marker.myID = {{item.id}};
     {% endfor %}
-
-  }
-
-  function open_station(e){
-    data = fetch('http://145.24.222.116:8000/weather/?ordering=-id&weather_station=' + e.target.myID).then(data=>{return data.json()}).then(res=>{
-      // document.getElementById("info").innerHTML = JSON.stringify(res);
-      res = res[0];
-      console.log(res);
-      k1.setValue(res.temperature);
-      k2.setValue(res.humidity);
-      k3.setValue(res.wind_speed);
-      k4.setValue(res.light_intensity);
-    });
-
 
   }
 </script>

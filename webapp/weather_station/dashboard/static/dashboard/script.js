@@ -1,4 +1,4 @@
-var base_url = "ws://localhost:8000/dashboard/ws/";
+var base_url = "ws://145.24.222.116:8000/dashboard/ws/";
 const websocket = new WebSocket(base_url);
 
 websocket.onopen = function(e){
@@ -17,33 +17,34 @@ window.onload = function(){
     const g4 = document.getElementById('gauge4');
     // console.log(time);
 
-    const config = {
-        type: 'line',
-        data: {
-            labels: time,
-            datasets: [
-            {
-                label: 'Humidity',
-                data: h_val
-            },
-            {
-                label: 'Temperature',
-                data: t_val
-            },
-            {
-                label: 'Wind Speed',
-                data: w_val
-            },
-            {
-                label: 'Light intensity',
-                data: l_val
-            }
-        ],
-        },
-        options: {
-          responsive: true,
-        }
-      };
+    
+    // const config = {
+    //     type: 'line',
+    //     data: {
+    //         labels: values.data,
+    //         datasets: [
+    //         {
+    //             label: 'Humidity',
+    //             data: values.data.humidity
+    //         },
+    //         {
+    //             label: 'Temperature',
+    //             data: values.data.temperature
+    //         },
+    //         {
+    //             label: 'Wind Speed',
+    //             data: values.data.wind_speed
+    //         },
+    //         {
+    //             label: 'Light intensity',
+    //             data: values.data.light_intensity
+    //         }
+    //     ],
+    //     },
+    //     options: {
+    //       responsive: true,
+    //     }
+    //   };
 
     const slim_config = {
       type: 'line',
@@ -55,7 +56,7 @@ window.onload = function(){
             data: [0]
         },
         {
-            label: 'Temperature',
+            label: 'temperature',
             data: [0]
         },
         {
@@ -69,45 +70,29 @@ window.onload = function(){
         ]
       }
     };
-    const c1 = new Chart(ctx, config);
+    // const c1 = new Chart(ctx, config);
     c2 = new Chart(ctx1, slim_config)
     c2.update();
-
-    var k1 = pureknob.createKnob(150, 150);
-    k1.setProperty("angleStart", -0.75 * Math.PI);
-    k1.setProperty("angleEnd", 0.75 * Math.PI);
-    k1.setProperty("colorFG", "#88ff88");
-    k1.setProperty("readonly", true);
-    k1.setProperty("label", "Temperature")
-    k1.setValue(g1_val);
-    g1.appendChild(k1.node());
-
-    var k2 = pureknob.createKnob(150, 150);
-    k2.setProperty("angleStart", -0.75 * Math.PI);
-    k2.setProperty("angleEnd", 0.75 * Math.PI);
-    k2.setProperty("colorFG", "#88ff88");
-    k2.setProperty("readonly", true);
-    k2.setProperty("label", "Humidity");
-    k2.setValue(g2_val);
-    g2.appendChild(k2.node());
-
-    var k3 = pureknob.createKnob(150, 150);
-    k3.setProperty("angleStart", -0.75 * Math.PI);
-    k3.setProperty("angleEnd", 0.75 * Math.PI);
-    k3.setProperty("colorFG", "#88ff88");
-    k3.setProperty("readonly", true);
-    k3.setProperty("label", "Wind Speed");
-    k3.setValue(g3_val);
-    g3.appendChild(k3.node());
-
-    var k4 = pureknob.createKnob(150, 150);
-    k4.setProperty("angleStart", -0.75 * Math.PI);
-    k4.setProperty("angleEnd", 0.75 * Math.PI);
-    k4.setProperty("colorFG", "#88ff88");
-    k4.setProperty("readonly", true);
-    k4.setProperty("label", "Light intensity");
-    k4.setValue(g4_val);
-    g4.appendChild(k4.node());
+    url = 'http://145.24.222.116:8000/api/weather/?ordering=-id&weather_station=1';
+    console.log(url);
+    data = fetch(url).then(data=>{return data.json()}).then(res=>{
+      console.log(res);
+      var knobs = [];
+      for(value in res[0].data){
+          console.log(value);
+          console.log(res[0].data[value])
+          var k1 = pureknob.createKnob(150,150);
+          k1.setProperty("angleStart", -0.75 * Math.PI);
+          k1.setProperty("angleEnd", 0.75 * Math.PI);
+          k1.setProperty("colorFG", "#88ff88");
+          k1.setProperty("colorLabel", "#000000");
+          k1.setProperty("readonly", true);
+          k1.setProperty("label", value);
+          k1.setValue(res[0].data[value]);
+          g1.appendChild(k1.node()); 
+          knobs.push(k1.node());
+      }
+    });
 
   websocket.onmessage = function(event){
       console.log("MESSAGE RECEIVED")
@@ -148,26 +133,34 @@ function callREST(){
   console.log("RESTINGGGG");
   var start_time = document.getElementById('start_time').value;
   var end_time = document.getElementById('end_time').value;
-  url = "http://localhost:8000/weather?format=json&time__time__gte="+ start_time +"&time__time__lte="+ end_time;
+  url = "http://145.24.222.116:8000/api/weather?format=json&time__time__gte="+ start_time +"&time__time__lte="+ end_time;
   console.log(url);
   xhttp.responseType = 'json';
   xhttp.open("GET", url, true);
   xhttp.send();
   xhttp.onload = function() {
     res = xhttp.response;
-    console.log(c2.data);
-    c2.data.labels = ['0'];
-    console.log(c2.data.datasets[0]);
-    for(var i = 0; i < c2.data.datasets.length; i++){
-      c2.data.datasets[i].data = [0];
-    }
     for(var i = 0; i < res.length; i++){
-      // addData2(c2, 'label', res[i])
       c2.data.labels.push(res[i]['time']);
-      c2.data.datasets[0].data.push(res[i]['humidity']);
-      c2.data.datasets[1].data.push(res[i]['temperature']);
-      c2.data.datasets[2].data.push(res[i]['wind_speed']);
-      c2.data.datasets[3].data.push(res[i]['light_intensity']);
+
+      c2.data.datasets.push(labels);
+      for(val in res[i].data){
+        for(dataset in c2.data.datasets){
+          if(c2.data.datasets[i].label == val){
+            console.log("MATCHHHH");
+            c2.data.datasets[i].data.push(res[i].data[val]);
+            // res[i].data.remove(val);
+          }
+        }
+      }
+
+      console.log(res);
+
+      // addData2(c2, 'label', res[i])
+      // c2.data.datasets[0].data.push(res[i].data['humidity']);
+      // c2.data.datasets[1].data.push(res[i].data['temperature']);
+      // c2.data.datasets[2].data.push(res[i].data['wind_speed']);
+      // c2.data.datasets[3].data.push(res[i].data['light_intensity']);
     }
     console.log(c2.data);
     

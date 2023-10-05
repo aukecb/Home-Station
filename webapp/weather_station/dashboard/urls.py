@@ -26,8 +26,8 @@ router.register(r'groups', views.GroupViewSet)
 router.register(r'weather', views.WeatherViewSet, basename='weather')
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('dashboard/', views.index, name='index'),
     path('getdata/', views.getdata, name='getdata'),
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

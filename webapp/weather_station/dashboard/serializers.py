@@ -16,4 +16,4 @@ class WeatherSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(default=serializers.CurrentUserDefault(), read_only=True)
     class Meta:
         model = Weather
-        fields = ['id', 'user', 'weather_station', 'time', 'temperature', 'humidity', 'wind_speed', 'light_intensity']
+        fields = ['id', 'user', 'weather_station', 'time', 'data']

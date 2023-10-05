@@ -5,7 +5,6 @@
 
 <head>
     <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
-    <script src="{% static 'dashboard/script.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'dashboard/gauge.js' %}"></script>
     <script src="{% static 'dashboard/pureknob.js' %}"></script>
@@ -89,17 +88,6 @@
 
         </div>
     </main>
+    <script src="{% static 'dashboard/script.js' %}" > </script>
 </body>
-<script>
-    const g1_val = {{ data.last.humidity }};
-    const g2_val = {{ data.last.temperature }};
-    const g3_val = {{ data.last.light_intensity }};
-    const g4_val = {{ data.last.wind_speed }};
-    const time = [{% for item in data %}"{{item.time}}", {% endfor %}];
-    var h_val = [{% for item in data %}{{item.humidity}}, {% endfor %}];
-    var t_val = [{% for item in data %}{{item.temperature}}, {% endfor %}];
-    var w_val = [{% for item in data %}{{item.wind_speed}}, {% endfor %}];
-    var l_val = [{% for item in data %}{{item.light_intensity}}, {% endfor %}];
-</script>
-
 </html>

@@ -38,7 +38,7 @@
 # to add the specified IP addresses and/or hostnames to the subjAltName list
 # These contain white-space-separated values
 #
-IPLIST="145.24.238.1 192.168.1.1 145.24.82.1"
+IPLIST="145.24.222.116"
 #	HOSTLIST="a.example.com b.example.com"
 
 set -e
@@ -66,7 +66,7 @@ DIR=${TARGET:='.'}
 ALTHOSTNAMES=${HOSTLIST}
 ALTADDRESSES=${IPLIST}
 CA_ORG='/O=OwnTracks.org/OU=generate-CA/emailAddress=nobody@example.net'
-CA_DN="/CN=An MQTT broker${CA_ORG}"
+CA_DN="/CN=145.24.222.116${CA_ORG}"
 CACERT=${DIR}/ca
 SERVER="${DIR}/${host}"
 SERVER_DN="/CN=${host}$CA_ORG"
