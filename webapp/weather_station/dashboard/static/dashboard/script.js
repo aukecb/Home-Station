@@ -1,4 +1,4 @@
-var base_url = "ws://145.24.222.116:8000/dashboard/ws/";
+var base_url = "wss://whub.duckdns.org/dashboard/ws/";
 const websocket = new WebSocket(base_url);
 
 websocket.onopen = function(e){
@@ -16,7 +16,7 @@ window.onload = function(){
     };
 
     c2 = new Chart(ctx1, slim_config)
-    url = 'http://145.24.222.116:8000/api/weather/?weather_station=1';
+    url = 'https://whub.duckdns.org/api/weather/?weather_station=1';
     console.log(url);
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
       for(value in res[res.length-1].data){
@@ -65,7 +65,7 @@ function callREST(){
   console.log("RESTINGGGG");
   var start_time = document.getElementById('start_time').value;
   var end_time = document.getElementById('end_time').value;
-  url = "http://145.24.222.116:8000/api/weather?format=json&time__time__gte="+ start_time +"&time__time__lte="+ end_time;
+  url = "https://whub.duckdns.org/api/weather?format=json&time__time__gte="+ start_time +"&time__time__lte="+ end_time;
   xhttp.responseType = 'json';
   xhttp.open("GET", url, true);
   xhttp.send();
@@ -73,14 +73,14 @@ function callREST(){
     res = xhttp.response;
     var lbls = res.map(function(d) { return d['time'];});
     var datasets = []
-    Object.entries(res[res.length-1].data).forEach(function(key, value){
-      datasets.push({
-        label: key[0],
-        data: res.map(function(d) {return d.data[key[0]]})
+    if(res.length > 0){
+      Object.entries(res[res.length-1].data).forEach(function(key, value){
+        datasets.push({
+          label: key[0],
+          data: res.map(function(d) {return d.data[key[0]]})
+        });
       });
-    });
-    console.log(datasets)
-    console.log(lbls);
+    }
     const data = {
       labels: lbls,
       datasets: datasets

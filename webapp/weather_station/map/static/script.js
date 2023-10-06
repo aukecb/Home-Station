@@ -6,14 +6,15 @@
     const g4 = document.getElementById('gauge4');
 
     function open_station(e){
-        url = 'http://145.24.222.116:8000/api/weather/?ordering=-id&weather_station=' + e.target.myID;
+        url = 'https://whub.duckdns.org/api/weather/?ordering=-id&weather_station=' + e.target.myID;
         console.log(url);
         data = fetch(url).then(data=>{return data.json()}).then(res=>{
             res = res[0];
-            console.log(res);
-            console.log(res.data);
             var knobs = [];
             g1.innerHTML = '';
+            if (res == undefined){
+                return;
+            }
             for(value in res.data){
                 console.log(value);
                 console.log(res.data[value])

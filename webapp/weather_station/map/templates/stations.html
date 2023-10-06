@@ -74,7 +74,7 @@
 
   function open_station(){
     document.getElementById("info").innerHTML = "test";
-    fetch('http://145.24.222.116:8000/weather/?ordering=-id').then(data=>{return data.json()}).then(res=>{console.log(res)});
+    fetch('https://whub.duckdns.org/weather/?ordering=-id').then(data=>{return data.json()}).then(res=>{console.log(res)});
 
 
   }

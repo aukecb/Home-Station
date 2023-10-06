@@ -13,14 +13,6 @@ services:
     ports:
       - 5432:5432
 
-  redis:
-    image: redis
-    restart: unless-stopped
-    volumes:
-      - redisdata:/data
-    ports:
-      - 6379:6379
-
   mqtt:
     image: eclipse-mosquitto:latest
     user: "1000:1000"
@@ -49,6 +41,29 @@ services:
     ports:
       - 8000:8000
 
+  redis:
+    image: redis
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    ports:
+      - 6379:6379
+
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    network_mode: host
+      #   ports:
+      #     - 80:80
+      #     - 443:443
+      #     - "443:443/udp"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
 volumes:
   pgdata:
   redisdata:
+  caddy_data:
+  caddy_config:
