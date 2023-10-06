@@ -7,6 +7,7 @@ websocket.onopen = function(e){
 
 let c2 = null;
 var knobs = [];
+console.log(data);
 
 window.onload = function(){
     const ctx1 = document.getElementById('chart1');

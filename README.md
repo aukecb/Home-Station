@@ -7,7 +7,7 @@ DISCLAIMER: the weather station hub is currently still under development don't e
 
 ### Setting up your account
 
-* Go to the server website: [http://145.24.222.116:8000](http://145.24.222.116:8000)
+* Go to the server website: [https://whub.duckdns.org](https://whub.duckdns.org)
 
 * Create a new account by pressing `Sign Up` button.
 
@@ -49,22 +49,23 @@ The server accepts data in JSON format, take a look at the examples:
 
 Make sure to use your own username and to specify your own weather station.
 
-To get the ID of your weather station use the following link: [http://145.24.222.116:8000/api/stations](http://145.24.222.116:8000/api/stations) and look for your username.
+To get the ID of your weather station use the following link: [https://whub.duckdns.org/api/stations](https://whub.duckdns.org/api/stations) and look for your username.
 
 
 ### Final toughts
 
-A dashboard is available at [http://145.24.222.116:8000/dashboard] and is currently still under construction
+A dashboard is available at [http://whub.duckdns.org/dashboard] and is currently still under construction
 
 You're welcome to create a pull request or create issues whenever you run into something or think some functionality could be improved.
 
 
 ## TODO
 
-- [ ] Set server to use HTTPS
+- [x] Set server to use HTTPS
 - [ ] Encrypt MQTT traffic
-- [ ] Move to domain?
-- [ ] 
+- [x] Move to domain?
+- [ ] Inform user when not logged in on map
+- [ ] Create seperate dashboards for each user
 
 ## Developer setup
 

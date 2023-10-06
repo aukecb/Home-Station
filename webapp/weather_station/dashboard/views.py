@@ -18,12 +18,13 @@ import datetime as dt
 
 # Create your views here.
 
-def index(request):
+def index(request, user):
     start_date = dt.datetime.now() - dt.timedelta(minutes=15)
     end_date = dt.datetime.now()
     today = [dt.datetime.today().time().min, dt.datetime.today().time().max]
+    data = Weather.objects.get(user=user)
     context = {
-        "data":Weather.objects.all()
+        "data": data
     }
     return render(request, "dashboard/index2.html", context=context)
 
