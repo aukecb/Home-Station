@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'dashboard/gauge.js' %}"></script>
     <script src="{% static 'dashboard/pureknob.js' %}"></script>
+    <script> const weather_data = "{{data}}";</script>
+
 </head>
 
 <body>
@@ -76,7 +78,6 @@
 
         </div>
     </main>
-    <script> const data = {{data}};</script>
     <script src="{% static 'dashboard/script.js' %}" > </script>
 </body>
 </html>

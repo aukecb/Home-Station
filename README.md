@@ -21,7 +21,120 @@ DISCLAIMER: the weather station hub is currently still under development don't e
 
 * Add following code to use mqtt
 
-        --TODO--
+        ```
+        #include <Arduino.h>
+        #include <DHT.h>
+        #include <WiFi.h>
+        #include <PubSubClient.h>
+        #include <HTTPClient.h>
+        #include <WiFiClientSecure.h>
+
+        #define DHT_PIN 26
+
+
+        const char* ssid = "Tesla IoT";
+        const char* password = "fsL6HgjN";
+
+        const char* mqtt_server = "145.24.222.116";
+        const char* mqtt_user = "minor";
+        const char* mqtt_pass = "smartthings2023";
+        const char* api_server = "http://145.24.222.116:8000/dashboard/weather/";
+
+        DHT dht(DHT_PIN, DHT11);
+        WiFiClient wifi_client;
+        // WiFiClientSecure wifi_client;
+        PubSubClient client(wifi_client);
+
+        long last_msg = 0;
+        char msg[50];
+        int value = 0;
+
+        void callback(char* topic, byte* message, unsigned int length);
+        void reconnect();
+
+        bool mqttConnect(){
+          client.setServer(mqtt_server, 8884);
+          client.setCallback(callback);
+          // Serial.println(CA_KEY);
+          Serial.print("Connecting to MQTT broker");
+          while(!client.connected()){
+            if(client.connect("esp32", mqtt_user, mqtt_pass)){
+              Serial.println("CONNECTED TO MQTT");
+            }else{
+              Serial.print("Failed with state ");
+              char err_buf[100];
+              Serial.println(client.state());
+              delay(2000);
+            }
+            Serial.print(".");
+          }
+          Serial.println();
+          client.subscribe("incoming");
+          return true;
+        }
+
+        void initWiFi(){
+          WiFi.mode(WIFI_STA);
+          // WiFi.begin(ssid, password, 11, bssid, true);
+          WiFi.begin(ssid, password);
+          Serial.print("Connecting to WiFi...");
+          while(WiFi.status() != WL_CONNECTED){
+            Serial.print(".");
+            delay(500);
+          }
+          Serial.println(WiFi.localIP());
+          // wifi_client.setCACert(CA_KEY);
+          mqttConnect();
+        }
+
+
+        void setup() {
+          // put your setup code here, to run once:
+          Serial.begin(115200);
+          initWiFi();
+          dht.begin();
+          delay(500);
+        }
+
+        void loop() {
+          // put your main code here, to run repeatedly:
+          float temp = dht.readTemperature();
+          float humid = dht.readHumidity();
+          Serial.println(temp);
+          Serial.println(humid);
+          if(WiFi.status() == WL_CONNECTED){
+            if(client.connected()){
+              String data = "{\"user\":\"auke\", \"weather_station\": 2, \"data\": {\"temperature\":\""+ (String)temp+"\",\"humidity\":\""+ (String)humid+"\",\"wind_speed\":4.0 ,\"light_intensity\":40}}";
+              if(!isnan(temp) && !isnan(humid)){
+                Serial.print("Sent: ");
+                Serial.println(data);
+                const char* d = data.c_str();
+                client.publish("test", d);
+              }
+            }else{
+              mqttConnect();
+            }
+          }else{
+            initWiFi();
+          }
+          client.loop();
+          delay(1000);
+        }
+
+        void callback(char* topic, byte* message, unsigned int length) {
+          Serial.print("Message arrived on topic: ");
+          Serial.print(topic);
+          Serial.print(". Message: ");
+          String messageTemp;
+          
+          for (int i = 0; i < length; i++) {
+            Serial.print((char)message[i]);
+            messageTemp += (char)message[i];
+          }
+          Serial.println();
+
+        }
+        ```
 
 * Or use following code to use http
 

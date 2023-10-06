@@ -7,17 +7,22 @@ websocket.onopen = function(e){
 
 let c2 = null;
 var knobs = [];
-console.log(data);
 
 window.onload = function(){
+    // console.log(data);
     const ctx1 = document.getElementById('chart1');
     const g1 = document.getElementById('gauge1');
+    const currentUrl = window.location.href;
+    var user = currentUrl.split("/")
+    user = user[user.length-1]
     const slim_config = {
       type: 'line',
     };
 
     c2 = new Chart(ctx1, slim_config)
-    url = 'https://whub.duckdns.org/api/weather/?weather_station=1';
+    
+    url = 'https://whub.duckdns.org/api/weather/?weather_station=' + user +'&user=' + user;
+    console.log(weather_data);
     console.log(url);
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
       for(value in res[res.length-1].data){
@@ -25,7 +30,7 @@ window.onload = function(){
           k1.setProperty("angleStart", -0.75 * Math.PI);
           k1.setProperty("angleEnd", 0.75 * Math.PI);
           k1.setProperty("colorFG", "#88ff88");
-          k1.setProperty("colorLabel", "#000000");
+          k1.setProperty("colorLabel", "#FFFFFF");
           k1.setProperty("readonly", true);
           k1.setProperty("label", value);
           k1.setValue(res[res.length-1].data[value]);
@@ -58,6 +63,7 @@ window.onload = function(){
         var knob = knobs[i];
         knob.setValue(data.data[knob.getProperty("label")])
       }
+      callREST();
   }
 }
 
