@@ -156,8 +156,12 @@ You're welcome to create a pull request or create issues whenever you run into s
 - [ ] Encrypt MQTT traffic
 - [x] Move to domain?
 - [ ] Inform user when not logged in on map
-- [ ] Create seperate dashboards for each user
-
+- [x] Create seperate dashboards for each user
+- [ ] Option to filter data in graph
+- [ ] Phone friendly
+- [ ] PWA
+- [ ] Translation
+- [ ] Dark mode
 ## Developer setup
 
 `docker compose up -d`
