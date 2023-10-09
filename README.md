@@ -20,16 +20,13 @@ DISCLAIMER: the weather station hub is currently still under development don't e
 ### Connecting your weatherstation to the server
 
 * Add following code to use mqtt
+    <details>
+    <summary>MQTT code</summary>
 
-        ```
         #include <Arduino.h>
-        #include <DHT.h>
         #include <WiFi.h>
         #include <PubSubClient.h>
         #include <HTTPClient.h>
-        #include <WiFiClientSecure.h>
-
-        #define DHT_PIN 26
 
 
         const char* ssid = "Tesla IoT";
@@ -38,11 +35,9 @@ DISCLAIMER: the weather station hub is currently still under development don't e
         const char* mqtt_server = "145.24.222.116";
         const char* mqtt_user = "minor";
         const char* mqtt_pass = "smartthings2023";
-        const char* api_server = "http://145.24.222.116:8000/dashboard/weather/";
+        const char* mqtt_topic = "weather";
 
-        DHT dht(DHT_PIN, DHT11);
         WiFiClient wifi_client;
-        // WiFiClientSecure wifi_client;
         PubSubClient client(wifi_client);
 
         long last_msg = 0;
@@ -55,7 +50,6 @@ DISCLAIMER: the weather station hub is currently still under development don't e
         bool mqttConnect(){
           client.setServer(mqtt_server, 8884);
           client.setCallback(callback);
-          // Serial.println(CA_KEY);
           Serial.print("Connecting to MQTT broker");
           while(!client.connected()){
             if(client.connect("esp32", mqtt_user, mqtt_pass)){
@@ -69,13 +63,11 @@ DISCLAIMER: the weather station hub is currently still under development don't e
             Serial.print(".");
           }
           Serial.println();
-          client.subscribe("incoming");
           return true;
         }
 
         void initWiFi(){
           WiFi.mode(WIFI_STA);
-          // WiFi.begin(ssid, password, 11, bssid, true);
           WiFi.begin(ssid, password);
           Serial.print("Connecting to WiFi...");
           while(WiFi.status() != WL_CONNECTED){
@@ -83,7 +75,6 @@ DISCLAIMER: the weather station hub is currently still under development don't e
             delay(500);
           }
           Serial.println(WiFi.localIP());
-          // wifi_client.setCACert(CA_KEY);
           mqttConnect();
         }
 
@@ -109,7 +100,7 @@ DISCLAIMER: the weather station hub is currently still under development don't e
                 Serial.print("Sent: ");
                 Serial.println(data);
                 const char* d = data.c_str();
-                client.publish("test", d);
+                client.publish(mqtt_topic, d);
               }
             }else{
               mqttConnect();
@@ -121,20 +112,7 @@ DISCLAIMER: the weather station hub is currently still under development don't e
           delay(1000);
         }
 
-        void callback(char* topic, byte* message, unsigned int length) {
-          Serial.print("Message arrived on topic: ");
-          Serial.print(topic);
-          Serial.print(". Message: ");
-          String messageTemp;
-          
-          for (int i = 0; i < length; i++) {
-            Serial.print((char)message[i]);
-            messageTemp += (char)message[i];
-          }
-          Serial.println();
-
-        }
-        ```
+  </details>
 
 * Or use following code to use http
 

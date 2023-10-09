@@ -56,6 +56,7 @@ class MyMqttConsumer(MqttConsumer):
         await self.channel_layer.group_add(
                 self.room_group_name, self.channel_name
                 )
+        await self.subscribe('weather', 2)
         await self.subscribe('test', 2)
 
     async def receive(self, mqtt_message):

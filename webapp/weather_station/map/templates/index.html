@@ -55,6 +55,7 @@
       <thead>
         <tr>
           <th scope="col">id</th>
+          <th scope="col">user</th>
           <th scope="col">lat</th>
           <th scope="col">long</th>
           <th scope="col">url</th>
@@ -64,6 +65,7 @@
       {% for item in stations %}
       <tr>
         <td scope="row">{{item.id}}</td>
+        <td scope="row">{{item.user}}</td>
         <td scope="row">{{item.latitude}}</td>
         <td scope="row">{{item.longitude}}</td>
         <td scope="row">{{item.base_url}}</td>

@@ -21,7 +21,7 @@ window.onload = function(){
 
     c2 = new Chart(ctx1, slim_config)
     
-    url = 'https://whub.duckdns.org/api/weather/?weather_station=' + user +'&user=' + user;
+    url = 'https://whub.duckdns.org/api/weather/?user=' + user;
     console.log(weather_data);
     console.log(url);
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
@@ -72,7 +72,7 @@ function callREST(){
   console.log("RESTINGGGG");
   var start_time = document.getElementById('start_time').value;
   var end_time = document.getElementById('end_time').value;
-  url = "https://whub.duckdns.org/api/weather?format=json&time__time__gte="+ start_time +"&time__time__lte="+ end_time;
+  url = "https://whub.duckdns.org/api/weather?format=json&time__time__gte="+ start_time +"&time__time__lte="+ end_time + "&user=" + user;
   xhttp.responseType = 'json';
   xhttp.open("GET", url, true);
   xhttp.send();

@@ -6,7 +6,13 @@
     const g4 = document.getElementById('gauge4');
 
     function open_station(e){
-        url = 'https://whub.duckdns.org/api/weather/?ordering=-id&weather_station=' + e.target.myID;
+        var x = (new Date()).getTimezoneOffset() * 60000; 
+        console.log(x);
+        var curtime = Date.now();
+        var prevtime = curtime - 15 * 60000;
+        var localISOTime = (new Date(Date.now() - x - (15 * 60000))).toISOString().slice(0,-1);
+        localISOTime = '';
+        url = 'https://whub.duckdns.org/api/weather/?ordering=-id&time__time__gte='+ localISOTime  + '&weather_station=' + e.target.myID;
         console.log(url);
         data = fetch(url).then(data=>{return data.json()}).then(res=>{
             res = res[0];
