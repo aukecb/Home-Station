@@ -37,20 +37,20 @@
       </div>
     </div>
   </header>
-  <div class="container">
+  <div class="container" style="padding: 10px">
     <div class="card" style="">
       <h4 class="card-header">Weather station</h4>
       {% leaflet_map "map" callback="init_map" %}
     </div>
-
+    <div style="padding: 10px"></div>
     <div class="card" style="">
       <h4 class="card-header">Weather info</h4>
       <div id="info" class="card-body container-fluid">
-        <div id="gauge1" class="row">
-        </div>
+        <div id="gauge1" class="row"></div>
+        <canvas id="myChart" style="height: 0px!important"></canvas>
       </div>
     </div>
-
+    <div style="padding: 10px"></div>
     <table class="table">
       <thead>
         <tr>
@@ -63,12 +63,12 @@
       </thead>
       <tbody>
       {% for item in stations %}
-      <tr>
-        <td scope="row">{{item.id}}</td>
+      <tr onclick="var user=document.getElementById('user#{{item.id}}').innerHTML; open_station(e = {target: {myID : user}})">
+        <td scope="row" id="user#{{item.id}}">{{item.id}}</td>
         <td scope="row">{{item.user}}</td>
         <td scope="row">{{item.latitude}}</td>
         <td scope="row">{{item.longitude}}</td>
-        <td scope="row">{{item.base_url}}</td>
+        <td scope="row"><a href="http://{{item.base_url}}">{{item.base_url}}</a></td>
       </tr>
       {% endfor %}
       </tbody>
@@ -77,13 +77,14 @@
   </div>
   
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{% static 'pureknob.js' %}"></script>
   <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
 <script>
   function init_map(map, options){
-    map.setView([51.5, 4.22], 5);
+    map.setView([52.05, 4.70], 7);
     var markerconfig = {
       color: 'red',
       fillColor: '#f03',

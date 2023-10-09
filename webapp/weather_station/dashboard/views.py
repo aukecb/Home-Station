@@ -22,9 +22,14 @@ def index_all(request):
     start_date = dt.datetime.now() - dt.timedelta(minutes=15)
     end_date = dt.datetime.now()
     today = [dt.datetime.today().time().min, dt.datetime.today().time().max]
-    context = {
-        "data": Weather.objects.all()
-    }
+    if request.user.is_authenticated:
+        context ={
+            "data": Weather.objects.filter(user=request.user)
+        }
+    else:
+        context = {
+            "data": Weather.objects.all()
+        }
     return render(request, "dashboard/index2.html", context=context)
 
 def index(request, user):
