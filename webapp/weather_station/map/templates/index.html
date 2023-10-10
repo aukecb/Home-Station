@@ -65,9 +65,9 @@
       </thead>
       <tbody>
       {% for item in stations %}
-      <tr onclick="var user=document.getElementById('user#{{item.id}}').innerHTML; open_station(e = {target: {myID : user}})">
+      <tr onclick="var user_id=document.getElementById('user#{{item.id}}').innerHTML; var uname=document.getElementById('username#{{item.id}}').innerHTML; open_station(e = {target: {myID : user_id, username: uname}})">
         <td scope="row" id="user#{{item.id}}">{{item.id}}</td>
-        <td scope="row">{{item.user}}</td>
+	<td scope="row" id="username#{{item.id}}">{{item.user}}</td>
         <td scope="row">{{item.latitude}}</td>
         <td scope="row">{{item.longitude}}</td>
         <td scope="row"><a href="http://{{item.base_url}}">{{item.base_url}}</a></td>
@@ -98,7 +98,7 @@
       }
       marker = L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
       marker.myID = {{item.id}};
-      marker.user = "{{item.user}}";
+      marker.username = "{{item.user}}";
     {% endfor %}
 
   }

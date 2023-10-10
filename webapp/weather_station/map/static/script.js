@@ -21,7 +21,8 @@ var current_station = 0;
 
 function open_station(e){
     current_station = parseInt(e.target.myID);
-    document.getElementById("info_header").innerHTML = e.target.user + "'s weather station";
+    document.getElementById("info_header").innerHTML = e.target.username + "'s weather station";
+    document.getElementById("map").style.height = '10px';
     url = 'https://whub.duckdns.org/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
     knobs = []
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
