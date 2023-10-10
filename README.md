@@ -23,94 +23,79 @@ DISCLAIMER: the weather station hub is currently still under development don't e
     <details>
     <summary>MQTT code</summary>
 
-        #include <Arduino.h>
-        #include <WiFi.h>
-        #include <PubSubClient.h>
-        #include <HTTPClient.h>
+      #include <Arduino.h>
+      #include <WiFi.h>
+      #include <PubSubClient.h>
 
 
-        const char* ssid = "Tesla IoT";
-        const char* password = "fsL6HgjN";
+      const char* ssid = "Tesla IoT";
+      const char* password = "fsL6HgjN";
 
-        const char* mqtt_server = "145.24.222.116";
-        const char* mqtt_user = "minor";
-        const char* mqtt_pass = "smartthings2023";
-        const char* mqtt_topic = "weather";
+      const char* mqtt_server = "145.24.222.116";
+      const char* mqtt_user = "minor";
+      const char* mqtt_pass = "smartthings2023";
+      const char* mqtt_topic = "weather";
 
-        WiFiClient wifi_client;
-        PubSubClient client(wifi_client);
+      WiFiClient wifi_client;
+      PubSubClient client(wifi_client);
 
-        long last_msg = 0;
-        char msg[50];
-        int value = 0;
+      void reconnect();
 
-        void callback(char* topic, byte* message, unsigned int length);
-        void reconnect();
-
-        bool mqttConnect(){
-          client.setServer(mqtt_server, 8884);
-          client.setCallback(callback);
-          Serial.print("Connecting to MQTT broker");
-          while(!client.connected()){
-            if(client.connect("esp32", mqtt_user, mqtt_pass)){
-              Serial.println("CONNECTED TO MQTT");
-            }else{
-              Serial.print("Failed with state ");
-              char err_buf[100];
-              Serial.println(client.state());
-              delay(2000);
-            }
-            Serial.print(".");
+      bool mqttConnect(){
+        client.setServer(mqtt_server, 8884);
+        Serial.print("Connecting to MQTT broker");
+        while(!client.connected()){
+          if(client.connect("esp32", mqtt_user, mqtt_pass)){
+            Serial.println("CONNECTED TO MQTT");
           }
-          Serial.println();
-          return true;
+          Serial.print(".");
         }
+        Serial.println();
+        return true;
+      }
 
-        void initWiFi(){
-          WiFi.mode(WIFI_STA);
-          WiFi.begin(ssid, password);
-          Serial.print("Connecting to WiFi...");
-          while(WiFi.status() != WL_CONNECTED){
-            Serial.print(".");
-            delay(500);
-          }
-          Serial.println(WiFi.localIP());
-          mqttConnect();
-        }
-
-
-        void setup() {
-          // put your setup code here, to run once:
-          Serial.begin(115200);
-          initWiFi();
-          dht.begin();
+      void initWiFi(){
+        WiFi.mode(WIFI_STA);
+        WiFi.begin(ssid, password);
+        Serial.print("Connecting to WiFi...");
+        while(WiFi.status() != WL_CONNECTED){
+          Serial.print(".");
           delay(500);
         }
+        Serial.println(WiFi.localIP());
+        mqttConnect();
+      }
 
-        void loop() {
-          // put your main code here, to run repeatedly:
-          float temp = dht.readTemperature();
-          float humid = dht.readHumidity();
-          Serial.println(temp);
-          Serial.println(humid);
-          if(WiFi.status() == WL_CONNECTED){
-            if(client.connected()){
-              String data = "{\"user\":\"auke\", \"weather_station\": 2, \"data\": {\"temperature\":\""+ (String)temp+"\",\"humidity\":\""+ (String)humid+"\",\"wind_speed\":4.0 ,\"light_intensity\":40}}";
-              if(!isnan(temp) && !isnan(humid)){
-                Serial.print("Sent: ");
-                Serial.println(data);
-                const char* d = data.c_str();
-                client.publish(mqtt_topic, d);
-              }
-            }else{
-              mqttConnect();
+
+      void setup() {
+        // put your setup code here, to run once:
+        Serial.begin(115200);
+        initWiFi();
+        delay(500);
+      }
+
+      void loop() {
+        // put your main code here, to run repeatedly:
+        float temp = 24.0;
+        float humid = 23;
+        if(WiFi.status() == WL_CONNECTED){
+          if(client.connected()){
+            String data = "{\"user\":\"auke\", \"weather_station\": 2, \"data\": {\"temperature\":\""+ (String)temp+"\",\"humidity\":\""+ (String)humid+"\",\"wind_speed\":4.0 ,\"light_intensity\":40}}";
+            if(!isnan(temp) && !isnan(humid)){
+              Serial.print("Sent: ");
+              Serial.println(data);
+              const char* d = data.c_str();
+              client.publish(mqtt_topic, d);
             }
           }else{
-            initWiFi();
+            mqttConnect();
           }
-          client.loop();
-          delay(1000);
+        }else{
+          initWiFi();
         }
+        client.loop();
+        delay(1000);
+      }
 
   </details>
 
