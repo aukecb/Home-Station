@@ -159,7 +159,7 @@ You're welcome to create a pull request or create issues whenever you run into s
 - [x] Create seperate dashboards for each user
 - [ ] Option to filter data in graph
 - [ ] Phone friendly
-- [ ] PWA
+- [x] PWA
 - [ ] Translation
 - [ ] Dark mode
 ## Developer setup

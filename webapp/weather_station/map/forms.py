@@ -38,6 +38,7 @@ class StaffCreationForm(UserCreationForm):
         return user
 
 class StationForm(ModelForm):
+    base_url = forms.CharField(label="Your dashboard url", required=False)
     class Meta:
         model = Weather_Stations
         fields = ('latitude', 'longitude', 'base_url')

@@ -6,17 +6,23 @@ const websocket = new WebSocket(base_url);
 
 const slim_config = {
 type: 'line',
+options: {
+  interaction: {
+    intersect: false,
+    mode: 'index'
+  }
+}
 };
 let c2 = new Chart(ctx, slim_config);
 c2.canvas.style.display = 'none';
 
 var knobs = [];
 var current_station = 0;
+
 function open_station(e){
     current_station = parseInt(e.target.myID);
-    console.log(e);
+    document.getElementById("info_header").innerHTML = e.target.user + "'s weather station";
     url = 'https://whub.duckdns.org/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
-    console.log(url);
     knobs = []
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
         res = res.results;

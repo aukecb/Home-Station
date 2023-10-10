@@ -3,12 +3,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+{% leaflet_js %}
+{% leaflet_css %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load pwa %}
 <head>
-    {% leaflet_js %}
-    {% leaflet_css %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
     <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+  {% progressive_web_app_meta %}
 </head>
 <body>
     <header class="p-3 bg-dark text-white">
@@ -44,7 +46,7 @@
     </div>
     <div style="padding: 10px"></div>
     <div class="card" style="">
-      <h4 class="card-header">Weather info</h4>
+      <h4 id="info_header" class="card-header">Weather info</h4>
       <div id="info" class="card-body container-fluid">
         <div id="gauge1" class="row"></div>
         <canvas id="myChart" style="height: 0px!important"></canvas>
@@ -85,15 +87,18 @@
 <script>
   function init_map(map, options){
     map.setView([52.05, 4.70], 7);
-    var markerconfig = {
-      color: 'red',
-      fillColor: '#f03',
-      fillOpacity: 0.5,
-      radius: 500
-    }
     {% for item in stations %}
+      var markerconfig = {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: 500,
+        title: "{{item.user}}",
+        riseOnHover: true
+      }
       marker = L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
       marker.myID = {{item.id}};
+      marker.user = "{{item.user}}";
     {% endfor %}
 
   }
