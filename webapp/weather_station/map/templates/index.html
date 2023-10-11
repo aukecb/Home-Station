@@ -8,26 +8,34 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load pwa %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
-    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+  <link rel="stylesheet" href="{% static 'style.css' %}">
   {% progressive_web_app_meta %}
 </head>
 <body>
-    <header class="p-3 bg-dark text-white">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <!-- <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="{% static '/images/icon.png' %}"/></svg> -->
-          <img  height="32" src="{% static '/images/icon.png' %}"></img>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+      <div class="container">
+        <a href="#" class="navbar-brand">
+          <img  height="32" src="{% static '/images/icon.png' %}" style="filter: invert(100%)"></img>
+          WHUB
         </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-          <li><a href="/map/setup-station" class="nav-link px-2 text-white">Create Weatherstation</a></li>
-	  <li><a href="/dashboard/{{user.id}}" class="nav-link px-2 text-white">Dashboard</a></li>
-        </ul>
-
-        <div class="text-end">
+        <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a href="/map/setup-station" class="nav-link">Create Weatherstation</a>
+            </li>
+            <li class="nav-item">
+              <a href="/map/dashboard" class="nav-link">Dashboard</a>
+            </li>
+          </ul>
+        </div>
+        <div class="nav-item ms-auto">
           {% if user.is_authenticated %}
           <a href="/map/logout"><button type="button" class="btn btn-outline-light me-2">Logout</button></a>
           {% else %}
@@ -36,31 +44,36 @@
           {% endif %}
 
         </div>
+
+        </div>
+      </div>
+    </nav>
+
+
       </div>
     </div>
   </header>
-  <div class="container" style="padding: 10px">
-    <div class="card" style="">
-      <h4 class="card-header">Weather station</h4>
-      {% leaflet_map "map" callback="init_map" %}
+  <div class="container pt-2">
+    <div class="card">
+      <h4 data-bs-toggle="collapse" data-bs-target="#card_map" class="card-header" >Weather station map</h4>
+      <div class="collapse show" id="card_map">{% leaflet_map "map" callback="init_map" %}</div>
     </div>
-    <div style="padding: 10px"></div>
-    <div class="card" style="">
-      <h4 id="info_header" class="card-header">Weather info</h4>
-      <div id="info" class="card-body container-fluid">
-        <div id="gauge1" class="row"></div>
-        <canvas id="myChart" style="height: 0px!important"></canvas>
+    <div class="pt-2"></div>
+    <div class="card">
+      <h4 id="info_header" class="card-header" data-bs-target="#info" data-bs-toggle="collapse">Weather info</h4>
+      <div id="info" class="card-body">
+        <div id="gauge1" class="row mx-auto "></div>
+        <canvas class="w-100 p-2 justify-content-center" id="myChart" style="height: 300px"></canvas>
       </div>
     </div>
-    <div style="padding: 10px"></div>
+    <div class="pt-2"></div>
+    <div class="card">
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">id</th>
-          <th scope="col">user</th>
-          <th scope="col">lat</th>
-          <th scope="col">long</th>
-          <th scope="col">url</th>
+          <th scope="col-xs-2">id</th>
+          <th scope="col-xs-4">user</th>
+          <th scope="col-xs-5">url</th>
         </tr>
       </thead>
       <tbody>
@@ -68,18 +81,18 @@
       <tr onclick="var user_id=document.getElementById('user#{{item.id}}').innerHTML; var uname=document.getElementById('username#{{item.id}}').innerHTML; open_station(e = {target: {myID : user_id, username: uname}})">
         <td scope="row" id="user#{{item.id}}">{{item.id}}</td>
 	<td scope="row" id="username#{{item.id}}">{{item.user}}</td>
-        <td scope="row">{{item.latitude}}</td>
-        <td scope="row">{{item.longitude}}</td>
         <td scope="row"><a href="http://{{item.base_url}}">{{item.base_url}}</a></td>
       </tr>
       {% endfor %}
       </tbody>
     </table>
+    </div>
 
   </div>
   
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0-rc"></script>
   <script src="{% static 'pureknob.js' %}"></script>
   <script src="{% static 'script.js' %}"></script>
 </body>

@@ -7,9 +7,31 @@ const websocket = new WebSocket(base_url);
 const slim_config = {
 type: 'line',
 options: {
+  responsive: false,
+  maintainAspectRatio: false,
+  //aspectRatio: 3|1,
   interaction: {
     intersect: false,
-    mode: 'index'
+    mode: 'index',
+  },
+  legend: {
+    position: 'top',
+    align: 'start'
+  },
+  scales: {
+    x: {
+      ticks: {
+        font: {
+          size: 12
+        },
+        callback: function(val, index){
+          console.log(val, index);
+          return this.getLabelForValue(val).substring(9, 18); 
+        },
+        autoSkip: true,
+        maxTicksLimit: 12
+      }
+    }
   }
 }
 };
@@ -35,9 +57,10 @@ function open_station(e){
             return;
         }
         c2.canvas.parentNode.style.height = '100%';
+	    
         c2.canvas.style.display = 'block';
         for(value in res[0].data){
-            var k1 = pureknob.createKnob(150,150);
+            var k1 = pureknob.createKnob(125,125);
             k1.setProperty("angleStart", -0.75 * Math.PI);
             k1.setProperty("angleEnd", 0.75 * Math.PI);
             k1.setProperty("colorFG", "#88ff88");

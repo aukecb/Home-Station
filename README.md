@@ -143,7 +143,7 @@ You're welcome to create a pull request or create issues whenever you run into s
 - [ ] Inform user when not logged in on map
 - [x] Create seperate dashboards for each user
 - [ ] Option to filter data in graph
-- [ ] Phone friendly
+- [x] Phone friendly
 - [x] PWA
 - [ ] Translation
 - [ ] Dark mode
