@@ -43,7 +43,10 @@ var current_station = 0;
 
 function open_station(e){
     current_station = parseInt(e.target.myID);
-    document.getElementById("info_header").innerHTML = e.target.username + "'s weather station";
+    var info = document.getElementById("info_header");
+    info.innerHTML = e.target.username + "'s weather station";
+    info.scrollIntoView(true, { behavior: "smooth", block: "start", inline: "center" });
+    // document.getElementById("card_info").classList.add("show");
     document.getElementById("map").style.height = '10px';
     url = 'https://whub.duckdns.org/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
     knobs = []

@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
   <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   {% progressive_web_app_meta %}
 </head>
 <body>
@@ -54,20 +55,28 @@
     </div>
   </header>
   <div class="container pt-2">
-    <div class="card">
-      <h4 data-bs-toggle="collapse" data-bs-target="#card_map" class="card-header" >Weather station map</h4>
+    <div class="shadow card accordion">
+      <div class="card-header accordion-button" data-bs-toggle="collapse" data-bs-target="#card_map">
+        <span class="col"><h4>Weather station map</h4></span>
+      </div>
       <div class="collapse show" id="card_map">{% leaflet_map "map" callback="init_map" %}</div>
     </div>
+
     <div class="pt-2"></div>
-    <div class="card">
-      <h4 id="info_header" class="card-header" data-bs-target="#info" data-bs-toggle="collapse">Weather info</h4>
-      <div id="info" class="card-body">
-        <div id="gauge1" class="row mx-auto "></div>
+
+    <div class="accordion shadow card">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#card_info" aria-expanded="true" aria-controls="card_info">
+        <h4 id="info_header">Weather info</h4>
+      </button>
+      <div id="card_info" class="collapse show">
+        <div id="gauge1" class="p-2 row mx-auto "></div>
         <canvas class="w-100 p-2 justify-content-center" id="myChart" style="height: 300px"></canvas>
       </div>
     </div>
+
     <div class="pt-2"></div>
-    <div class="card">
+
+    <div class="table-responsive shadow card">
     <table class="table">
       <thead>
         <tr>

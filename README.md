@@ -100,8 +100,33 @@ DISCLAIMER: the weather station hub is currently still under development don't e
   </details>
 
 * Or use following code to use http
+  <details>
+  <summary>HTTP code</summary>
+        // setup POST request
+        String url = "https://whub.duckdns.org/api/weather/";
+        char json[] = "{\"user\": \"YOUR_USERNAME\", \"weather_station\": YOUR_WEATHERSTATION_ID, \"data\": {\"humidity\": YOUR_HUMIDITY, \"temperature\": YOUR_TEMPERATURE, \"wind_speed\": YOUR_WINDSPEED}}";
+        HTTPClient http;
 
-        --TODO--
+        http.begin(url);
+        http.setAuthorization("YOUR_USERNAME", "YOUR_PASSWORD");
+        http.addHeader("Content-Type", "application/json");
+
+        // send POST request
+        int httpResponseCode = http.POST(json);
+
+        // check if POST request succeeded
+        if (httpResponseCode > 0){
+          String response = http.getString();
+          Serial.println(httpResponseCode);
+          Serial.println(response);
+        } else {
+          Serial.print("Error on sending POST: ");
+          Serial.println(httpResponseCode);
+        }
+
+        // end connection
+        http.end();
+  </details>
 
 * Setup using the following settings:
 
