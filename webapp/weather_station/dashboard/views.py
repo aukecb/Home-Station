@@ -75,7 +75,7 @@ class WeatherViewSet(viewsets.ModelViewSet):
     queryset = Weather.objects.all()
     serializer_class = WeatherSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter]
-    filterset_fields = {'id':['exact'], 'user':['exact'], 'weather_station':['exact'], 'time__time':['exact','gte', 'lte', 'exact']}
+    filterset_fields = {'id':['exact'], 'user':['exact'], 'weather_station':['exact'], 'time':['exact','gte', 'lte']}
     permission_classes = []
 
     def perform_create(self, serializer):

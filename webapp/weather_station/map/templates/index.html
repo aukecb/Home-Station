@@ -12,6 +12,13 @@
 <head>
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+ 
+  <!-- Include Date Range Picker -->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
   {% progressive_web_app_meta %}
 </head>
 <body>
@@ -55,7 +62,7 @@
     </div>
   </header>
   <div class="container pt-2">
-    <div class="shadow card accordion">
+    <div class="accordion card shadow">
       <div class="card-header accordion-button" data-bs-toggle="collapse" data-bs-target="#card_map">
         <span class="col"><h4>Weather station map</h4></span>
       </div>
@@ -64,12 +71,13 @@
 
     <div class="pt-2"></div>
 
-    <div class="accordion shadow card">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#card_info" aria-expanded="true" aria-controls="card_info">
+    <div class="accordion card shadow">
+      <div class="card-header accordion-button" data-bs-toggle="collapse" data-bs-target="#card_info">
         <h4 id="info_header">Weather info</h4>
-      </button>
+      </div>
       <div id="card_info" class="collapse show">
-        <div id="gauge1" class="p-2 row mx-auto "></div>
+        <div id="gauge1" class="p-2 row mx-auto"></div>
+        <input type="text" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
         <canvas class="w-100 p-2 justify-content-center" id="myChart" style="height: 300px"></canvas>
       </div>
     </div>
@@ -109,18 +117,18 @@
 <script>
   function init_map(map, options){
     map.setView([52.05, 4.70], 7);
+    var markerconfig = {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.5,
+      radius: 500,
+      title: "{{item.user}}",
+      riseOnHover: true,
+    }
     {% for item in stations %}
-      var markerconfig = {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: 500,
-        title: "{{item.user}}",
-        riseOnHover: true
-      }
-      marker = L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
-      marker.myID = {{item.id}};
-      marker.username = "{{item.user}}";
+      marker{{item.id}} = L.marker([{{item.latitude}}, {{item.longitude}}], markerconfig).on('click', open_station).addTo(map);
+      marker{{item.id}}.myID = {{item.id}};
+      marker{{item.id}}.username = "{{item.user}}";
     {% endfor %}
 
   }

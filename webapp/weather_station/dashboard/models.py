@@ -11,10 +11,6 @@ class Weather(models.Model):
     weather_station = models.ForeignKey(Weather_Stations, on_delete=models.PROTECT, related_name="station", null=False)
     time = models.DateTimeField(auto_now_add=True)
     data = models.JSONField()
-    # temperature = models.FloatField()
-    # humidity = models.FloatField()
-    # wind_speed = models.FloatField()
-    # light_intensity = models.FloatField()
 
     def __str__(self):
         return str(self.user)+ "_" + self.weather_station.__str__() + "_" + str(self.id)

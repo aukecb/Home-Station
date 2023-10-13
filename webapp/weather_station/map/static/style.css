@@ -13,6 +13,11 @@
 
 }
 
+img.toRed { filter: hue-rotate(170deg); height: 200px;}
+
+
+img.toBlue { filter: hue-rotate(-180deg);}
+
 .chartBox {
 	height: 800px;
 	width: 369;

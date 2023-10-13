@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'map',
     'dashboard',
     'pwa',
+    'corsheaders',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'weather_station.urls'
@@ -197,3 +199,5 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = ['https://whub.duckdns.org']
+
+CORS_ORIGIN_ALLOW_ALL = True

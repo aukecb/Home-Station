@@ -25,7 +25,6 @@ options: {
           size: 12
         },
         callback: function(val, index){
-          console.log(val, index);
           return this.getLabelForValue(val).substring(9, 18); 
         },
         autoSkip: true,
@@ -37,17 +36,100 @@ options: {
 };
 let c2 = new Chart(ctx, slim_config);
 c2.canvas.style.display = 'none';
+$('input[name="daterange"]').daterangepicker({
+    locale: { format: "DD/MM/YYYY HH:mm"},
+    showDropdowns: true,
+    timePicker: true,
+    timePicker24Hour: true,
+    autoApply: true,
+    alwaysShowCalendars: false,
+    ranges: {
+        Today: [
+          moment().startOf('day'),
+          moment()
+        ],
+        Yesterday: [
+          moment().subtract(1, 'days'),
+          moment()
+        ],
+        "This week": [
+          moment().subtract(1, 'weeks'),
+          moment()
+        ]
+    },
+}, function(start, end, label) {
+  console.log("New date range selected: " + start.format() + " to " + end.utc().utcOffset(2, true).format('') + " (predefined range: " + label + ")");
+
+  url = "https://whub.duckdns.org/api/weather?ordering=-id&weather_station=" + current_station + "&time__gte=" + start.format("YYYY-MM-DDTHH:mm:ss") + "&time__lte=" + end.format("YYYY-MM-DDTHH:mm:ss");
+  console.log(url);
+  var f = fetch(url)
+  console.log(f);
+  data = fetch(url).then(data=>{return data.json()}).then(res=>{
+      res = res.results;
+      g1.innerHTML = '';
+      if (res == undefined || res[0]== undefined){
+          c2.clear();
+          c2.canvas.parentNode.style.height = '0px';
+          c2.canvas.style.display = 'none';
+          return;
+      }
+      c2.canvas.parentNode.style.height = '100%';
+    
+      c2.canvas.style.display = 'block';
+      for(value in res[0].data){
+          var k1 = pureknob.createKnob(125,125);
+          k1.setProperty("angleStart", -0.75 * Math.PI);
+          k1.setProperty("angleEnd", 0.75 * Math.PI);
+          k1.setProperty("colorFG", "#88ff88");
+          k1.setProperty("colorLabel", "#000000");
+          k1.setProperty("readonly", true);
+          k1.setProperty("label", value);
+          k1.setValue(res[0].data[value]);
+          g1.appendChild(k1.node()); 
+          knobs.push(k1);
+
+      }
+      var lbls = res.map(function(d) {return d['time'].substring(2, 19);}).reverse();
+      var datasets = [];
+      Object.entries(res[res.length-1].data).forEach(function(key, value){
+          datasets.push({
+              label: key[0],
+              data: res.map(function(d) {return d.data[key[0]]}).reverse()
+          });
+      });
+      const data = {
+          labels: lbls,
+          datasets: datasets
+      }
+      c2.data = data;
+      c2.update();
+  });
+});
+
+// $(function() {
+//     $('input[name="daterange"]').daterangepicker({
+//         timePicker: true,
+//         timePickerIncrement: 30,
+//         locale: {
+//             format: 'MM/DD/YYYY h:mm A'
+//         }
+//     });
+// });
 
 var knobs = [];
 var current_station = 0;
 
 function open_station(e){
+    if(current_station != 0){
+      window["marker" + current_station]._icon.classList.remove("toRed");
+    }
     current_station = parseInt(e.target.myID);
+    window["marker" + e.target.myID]._icon.classList.add("toRed");
+
     var info = document.getElementById("info_header");
     info.innerHTML = e.target.username + "'s weather station";
     info.scrollIntoView(true, { behavior: "smooth", block: "start", inline: "center" });
-    // document.getElementById("card_info").classList.add("show");
-    document.getElementById("map").style.height = '10px';
+
     url = 'https://whub.duckdns.org/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
     knobs = []
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
