@@ -41,7 +41,8 @@ daterange_config ={
     showDropdowns: true,
     timePicker: true,
     timePicker24Hour: true,
-    autoApply: true,
+    autoApply: false,
+    autoUpdateInput: false,
     alwaysShowCalendars: false,
     ranges: {
         Today: [
@@ -54,6 +55,10 @@ daterange_config ={
         ],
         "This week": [
           moment().subtract(1, 'weeks'),
+          moment()
+        ],
+        "This month": [
+          moment().subtract(1, 'months'),
           moment()
         ]
     },
@@ -70,9 +75,6 @@ var knobs = [];
 var current_station = 0;
 
 function open_station_url(url){
-    if(current_station != 0){
-      window["marker" + current_station]._icon.classList.remove("toRed");
-    }
     if(current_station != 0){
       var date_picker = document.getElementById("date_picker");
       date_picker.style = "display: show";
@@ -140,7 +142,7 @@ function open_station(e){
     var info = document.getElementById("info_header");
     info.innerHTML = e.target.username + "'s weather station";
     info.scrollIntoView(true, { behavior: "smooth", block: "start", inline: "center" });
-
+    
     url = 'https://whub.duckdns.org/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
         console.log(res);
@@ -192,6 +194,7 @@ websocket.onopen = function(e){
 
 websocket.onmessage = function(event){
     var data = JSON.parse(event.data);
+    console.log(data);
     if(data.weather_station == current_station){
       for(var i = 0; i < knobs.length; i++){
         var knob = knobs[i];

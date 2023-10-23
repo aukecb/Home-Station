@@ -1,7 +1,13 @@
 from django.shortcuts import render
+import json
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User, Group
 import django_filters.rest_framework
+from dashboard.routing import channel_routing
+import paho.mqtt.client as mqtt
+from dashboard.consumers import MyMqttConsumer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -79,4 +85,8 @@ class WeatherViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def perform_create(self, serializer):
+        print(serializer.validated_data)
         serializer.save(user=self.request.user)
+        # channel_layer = get_channel_layer()
+        # async_to_sync(channel_layer.group_send)("weather", {"humidity": 33.0, "temperature": 50, "wind_speed": 13, "gas": 26, "testval": 11})
+        # MyMqttConsumer.as_asgi().weather_message(topic="weather", payload=serializer.data)
