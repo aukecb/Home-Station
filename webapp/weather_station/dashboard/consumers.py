@@ -26,15 +26,12 @@ class WSConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]
         self.room_group_name = "weather"
-        print(self.room_group_name)
-        print(self.channel_name)
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
         )
         self.accept()
 
     def receive(self, text_data):
-        print(text_data)
         text_data_json = json.loads(text_data)
         async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name, {"type": "weather.message", "message": text_data}

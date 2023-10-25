@@ -85,8 +85,6 @@ class WeatherViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def perform_create(self, serializer):
-        print(serializer.validated_data)
         serializer.save(user=self.request.user)
-        # channel_layer = get_channel_layer()
-        # async_to_sync(channel_layer.group_send)("weather", {"humidity": 33.0, "temperature": 50, "wind_speed": 13, "gas": 26, "testval": 11})
-        # MyMqttConsumer.as_asgi().weather_message(topic="weather", payload=serializer.data)
+        layer = get_channel_layer()
+        async_to_sync(layer.group_send)("weather", {"type": "weather.message", "message": serializer.data})
