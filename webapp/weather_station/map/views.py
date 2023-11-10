@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.apps import apps
 from .models import Weather_Stations
-from django.views import generic
 from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from .forms import StaffCreationForm, StationForm
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -15,15 +12,12 @@ import django_filters.rest_framework
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework import filters, generics
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework import filters
 
 from .models import Weather
 from .models import Weather_Stations
 from .serializers import UserSerializer, GroupSerializer, WeatherSerializer, StationSerializer
 from .forms import *
-import datetime as dt
 # Create your views here.
 
 def index(request):

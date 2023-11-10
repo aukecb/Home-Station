@@ -1,23 +1,19 @@
-from mqttasgi.consumers import MqttConsumer
-
-from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
-from asgiref.sync import sync_to_async, async_to_sync
-from channels.consumer import SyncConsumer
-from channels.layers import get_channel_layer
-import paho.mqtt.client as mqtt
-
-from django.conf import settings
 import django
 import os
 import json
+from .models import Weather
+from django.contrib.auth.models import User
+from .models import Weather_Stations
+from mqttasgi.consumers import MqttConsumer
+
+from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import sync_to_async, async_to_sync
+from channels.layers import get_channel_layer
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'weather_station.settings')
 
 django.setup()
-
-from .models import Weather
-from django.contrib.auth.models import User
-from .models import Weather_Stations
 
 channel_layer = get_channel_layer()
 
@@ -32,7 +28,6 @@ class WSConsumer(WebsocketConsumer):
         self.accept()
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
         async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name, {"type": "weather.message", "message": text_data}
                 )
