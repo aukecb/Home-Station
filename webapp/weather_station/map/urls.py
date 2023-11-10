@@ -17,6 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+router.register(r'stations', views.StationViewSet, basename='stations')
+router.register(r'weather', views.WeatherViewSet, basename='weather')
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -24,4 +31,6 @@ urlpatterns = [
     path('map/setup-station', views.create_station, name="create_station"),
     path('map/login/', views.UserLoginView.as_view(), name="login"),
     path('map/logout/', views.logout_view, name="logout"),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

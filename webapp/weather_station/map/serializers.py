@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Weather
-from map.models import Weather_Stations
+from .models import Weather_Stations, Weather
 from rest_framework import serializers
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

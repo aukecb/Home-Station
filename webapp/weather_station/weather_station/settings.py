@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'daphne',
     'channels',
     'map',
-    'dashboard',
     'pwa',
     'corsheaders',
     'rest_framework',

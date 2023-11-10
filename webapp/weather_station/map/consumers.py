@@ -17,7 +17,7 @@ django.setup()
 
 from .models import Weather
 from django.contrib.auth.models import User
-from map.models import Weather_Stations
+from .models import Weather_Stations
 
 channel_layer = get_channel_layer()
 
