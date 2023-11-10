@@ -9,7 +9,6 @@ type: 'line',
 options: {
   responsive: false,
   maintainAspectRatio: false,
-  //aspectRatio: 3|1,
   interaction: {
     intersect: false,
     mode: 'index',
@@ -47,11 +46,11 @@ daterange_config ={
     ranges: {
         Today: [
           moment().startOf('day'),
-          moment()
+          moment().add(2, 'hours')
         ],
         Yesterday: [
           moment().subtract(1, 'days'),
-          moment()
+          moment().startOf('day')
         ],
         "This week": [
           moment().subtract(1, 'weeks'),
@@ -91,23 +90,9 @@ function open_station_url(url){
             c2.canvas.style.display = 'none';
             return;
         }else{
-          g1.innerHTML = '';
           c2.canvas.parentNode.style.height = '100%';
         
           c2.canvas.style.display = 'block';
-          for(value in res[0].data){
-              var k1 = pureknob.createKnob(125,125);
-              k1.setProperty("angleStart", -0.75 * Math.PI);
-              k1.setProperty("angleEnd", 0.75 * Math.PI);
-              k1.setProperty("colorFG", "#88ff88");
-              k1.setProperty("colorLabel", "#000000");
-              k1.setProperty("readonly", true);
-              k1.setProperty("label", value);
-              k1.setValue(res[0].data[value]);
-              g1.appendChild(k1.node()); 
-              knobs.push(k1);
-
-          }
           var lbls = res.map(function(d) {return d['time'].substring(2, 19);}).reverse();
           var datasets = [];
           Object.entries(res[res.length-1].data).forEach(function(key, value){
@@ -173,7 +158,8 @@ function open_station(e){
         }
         var lbls = res.map(function(d) {return d['time'].substring(2, 19);}).reverse();
         var datasets = [];
-        Object.entries(res[res.length-1].data).forEach(function(key, value){
+        Object.entries(res[0].data).forEach(function(key, value){
+            console.log(key);
             datasets.push({
                 label: key[0],
                 data: res.map(function(d) {return d.data[key[0]]}).reverse()
@@ -183,6 +169,7 @@ function open_station(e){
             labels: lbls,
             datasets: datasets
         }
+        console.log(data);
         c2.data = data;
         c2.update();
     });

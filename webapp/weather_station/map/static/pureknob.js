@@ -276,11 +276,11 @@
 					/*
 					 * Clamp the actual value into the [valMin; valMax] range.
 					 */
-					if (value < valMin) {
-						value = valMin;
-					} else if (value > valMax) {
-						value = valMax;
-					}
+					// if (value < valMin) {
+					// 	value = valMin;
+					// } else if (value > valMax) {
+					// 	value = valMax;
+					// }
 
 					// value = Math.round(value);
 					this.setProperty('val', value);
@@ -626,11 +626,11 @@
 					/*
 					 * Clamp the actual value into the [valMin; valMax] range.
 					 */
-					if (value < valMin) {
-						value = valMin;
-					} else if (value > valMax) {
-						value = valMax;
-					}
+					// if (value < valMin) {
+					// 	value = valMin;
+					// } else if (value > valMax) {
+					// 	value = valMax;
+					// }
 
 					// value = Math.round(value);
 					this.setProperty('val', value);
@@ -668,6 +668,10 @@
 						angle = 0;
 					}
 
+				}
+
+				if (angle > angleEnd){
+					angle = angleEnd;
 				}
 
 				const valMin = properties.valMin;
