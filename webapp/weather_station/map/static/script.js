@@ -83,7 +83,6 @@ function open_station_url(url){
     info.scrollIntoView(true, { behavior: "smooth", block: "start", inline: "center" });
 
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
-        console.log(res);
         res = res.results;
         if (res == undefined || res[0]== undefined){
             c2.clear();
@@ -130,7 +129,6 @@ function open_station(e){
     
     url = 'https://whub.duckdns.org/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
-        console.log(res);
         res = res.results;
         if (res == undefined || res[0]== undefined){
             c2.clear();
@@ -159,7 +157,6 @@ function open_station(e){
         var lbls = res.map(function(d) {return d['time'].substring(2, 19);}).reverse();
         var datasets = [];
         Object.entries(res[0].data).forEach(function(key, value){
-            console.log(key);
             datasets.push({
                 label: key[0],
                 data: res.map(function(d) {return d.data[key[0]]}).reverse()
