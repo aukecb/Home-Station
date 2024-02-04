@@ -1,8 +1,9 @@
 const ctx = document.getElementById('myChart');
 const g1 = document.getElementById('gauge1');
 
-var base_url = "wss://whub.duckdns.org/dashboard/ws/";
-const websocket = new WebSocket(base_url);
+var base_url = "whub.blankwaard.eu"
+var ws_url = "wss://whub.blankwaard.eu/dashboard/ws/";
+const websocket = new WebSocket(ws_url);
 
 const slim_config = {
 type: 'line',
@@ -66,7 +67,7 @@ $('input[name="daterange"], span[name="cal"]').daterangepicker(daterange_config
 , function(start, end, label) {
   console.log("New date range selected: " + start.format() + " to " + end.utc().utcOffset(2, true).format('') + " (predefined range: " + label + ")");
 
-  url = "https://whub.duckdns.org/api/weather?ordering=-id&weather_station=" + current_station + "&time__gte=" + start.format("YYYY-MM-DDTHH:mm:ss") + "&time__lte=" + end.format("YYYY-MM-DDTHH:mm:ss");
+  url = "https://"+ base_url +"/api/weather?ordering=-id&weather_station=" + current_station + "&time__gte=" + start.format("YYYY-MM-DDTHH:mm:ss") + "&time__lte=" + end.format("YYYY-MM-DDTHH:mm:ss");
   open_station_url(url)
 });
 
@@ -127,7 +128,7 @@ function open_station(e){
     info.innerHTML = e.target.username + "'s weather station";
     info.scrollIntoView(true, { behavior: "smooth", block: "start", inline: "center" });
     
-    url = 'https://whub.duckdns.org/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
+    url = 'https://'+ base_url +'/api/weather/?ordering=-id&limit=50&weather_station=' + e.target.myID;
     data = fetch(url).then(data=>{return data.json()}).then(res=>{
         res = res.results;
         if (res == undefined || res[0]== undefined){
@@ -191,7 +192,7 @@ websocket.onmessage = function(event){
 function callREST(){
   var xhttp = new XMLHttpRequest();
   console.log("RESTINGGGG");
-  url = "https://whub.duckdns.org/api/weather?format=json&ordering=-id&limit=50&weather_station=" + current_station;
+  url = "https://" + base_url + "/api/weather?format=json&ordering=-id&limit=50&weather_station=" + current_station;
   data = fetch(url).then(data=>{return data.json()}).then(res=>{
       res = res.results;
       var lbls = res.map(function(d){return d['time'].substring(2, 19);}).reverse();

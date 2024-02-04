@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-^gpk477w0r@^wvs$uo5r(rj=xzflln3z+qc8n6k=x%m^ybgig+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'https://whub.duckdns.org']
+ALLOWED_HOSTS = ['*', 'https://whub.duckdns.org', 'https://whub.blankwaard.eu']
 
 
 # Application definition
@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'django.contrib.admin',
+    'mqttasgi',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'leaflet',
-    'mqttasgi',
     'django_bootstrap5',
 ]
 
@@ -197,6 +197,6 @@ DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_TRUSTED_ORIGINS = ['https://whub.duckdns.org']
+CSRF_TRUSTED_ORIGINS = ['https://whub.duckdns.org', 'https://whub.blankwaard.eu']
 
 CORS_ORIGIN_ALLOW_ALL = True
