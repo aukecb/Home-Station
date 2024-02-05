@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'weather_station',
         'USER': 'django',
         'PASSWORD': 'django',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -179,7 +179,7 @@ CHANNEL_LAYERS ={
     'default':{
         'BACKEND': "channels_redis.core.RedisChannelLayer",
         'CONFIG': {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("redis", 6379)],
         }
     },
 }
@@ -190,7 +190,7 @@ REST_FRAMEWORK = {
         'PAGE_SIZE': 100
         }
 
-MQTT_BROKER_HOST = "127.0.0.1"
+MQTT_BROKER_HOST = "mqtt"
 MQTT_BROKER_PORT = 1883
 DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
 
